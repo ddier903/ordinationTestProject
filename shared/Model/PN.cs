@@ -22,10 +22,16 @@ public class PN : Ordination
     /// </summary>
     public bool givDosis(Dato givesDen)
     {
+        if(givesDen == null)
+        {
+            return false;
+        }
+
         bool isValid = givesDen.dato >= startDen && givesDen.dato <= slutDen;
         if (isValid)
         {
             dates.Add(givesDen);
+            return true;
         }
 
         return false;
