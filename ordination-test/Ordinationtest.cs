@@ -32,7 +32,7 @@ public class OrdinationTest
     public void TC3_AntalDage_SlutFørStart_KasterException()
     {
         var ord = new DagligFast(new DateTime(2024, 3, 5), new DateTime(2024, 3, 1), lm, 1, 1, 1, 1);
-        ord.antalDage(); // Forventes at kaste exception
+        ord.antalDage(); 
     }
 
     [TestMethod]
