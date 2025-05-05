@@ -179,28 +179,35 @@ public class DataService
         return dagligFast;
     }
 
-    public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato)
+    public DagligSkæv? OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato)
     {
         var patient = db.Patienter.Include(p => p.ordinationer).FirstOrDefault(p => p.PatientId == patientId);
         var laegemiddel = db.Laegemiddler.FirstOrDefault(l => l.LaegemiddelId == laegemiddelId);
 
-        // returnere fejl hvis noget mangler
+        
         if (patient == null || laegemiddel == null)
-        {
-            throw new ArgumentException("Patient eller lægemiddel blev ikke fundet");
-        }
+            return null;
 
+        if (startDato > slutDato)
+            return null;
+
+        if (doser == null || doser.Length == 0)
+            return null;
+
+        if (doser.Any(d => d.antal <= 0 || d.tid < startDato || d.tid > slutDato))
+            return null;
+
+      
         var dagligSkaev = new DagligSkæv(startDato, slutDato, laegemiddel);
-        dagligSkaev.doser = doser.ToList(); // Lægger doserne ind
+        dagligSkaev.doser = doser.ToList();
 
-        // tilføjer til databasen
         db.DagligSkæve.Add(dagligSkaev);
         patient.ordinationer.Add(dagligSkaev);
-
         db.SaveChanges();
 
         return dagligSkaev;
     }
+
 
 
     public string AnvendOrdination(int id, Dato dato)
