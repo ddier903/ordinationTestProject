@@ -184,33 +184,23 @@ public class DataService
         var patient = db.Patienter.Include(p => p.ordinationer).FirstOrDefault(p => p.PatientId == patientId);
         var laegemiddel = db.Laegemiddler.FirstOrDefault(l => l.LaegemiddelId == laegemiddelId);
 
+        if (patient == null || laegemiddel == null || doser.Length == 0 || startDato > slutDato)
+            return null;
 
-        if (patient == null || laegemiddel == null)
-        {
-            return null;
-        }
-        if (startDato > slutDato)
-        {
-            return null;
-        }
-        if (doser == null || doser.Length == 0)
-        {
-            return null;
-        }
-        if (doser.Any(d => d.antal <= 0 || d.tid < startDato || d.tid > slutDato))
-        {
-            return null;
-        }
-      
         var dagligSkaev = new DagligSkæv(startDato, slutDato, laegemiddel);
-        dagligSkaev.doser = doser.ToList();
-
         db.DagligSkæve.Add(dagligSkaev);
+
+        foreach (var dose in doser)
+        {
+            dagligSkaev.doser.Add(dose);
+        }
+
         patient.ordinationer.Add(dagligSkaev);
         db.SaveChanges();
 
         return dagligSkaev;
     }
+
 
 
 
