@@ -100,7 +100,8 @@
     private int Antal { get; set; }
 
     private async void Opret() {
-        if (Patient == null || laegemiddel == null) {
+        if (Patient == null || laegemiddel == null || StartDato > SlutDato)
+        {
             return;
         }
         Console.WriteLine("Opret");
