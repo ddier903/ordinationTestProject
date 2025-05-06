@@ -19,8 +19,12 @@ public class DagligSkæv : Ordination
 
     public void opretDosis(DateTime tid, double antal)
     {
+        if (antal < 0)
+            throw new ArgumentException("Dosis må ikke være negativ.");
+
         doser.Add(new Dosis(tid, antal));
     }
+
 
     public override double samletDosis()
     {
