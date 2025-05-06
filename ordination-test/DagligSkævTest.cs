@@ -48,6 +48,14 @@ public class DagligSkaevTest
     }
 
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void OpretDosis_NegativAntal_KasterException()
+    {
+        var ord = new DagligSkæv(start, slut, lm);
+        ord.opretDosis(new DateTime(2024, 3, 1, 10, 0, 0), -1.0);
+    }
+
+    [TestMethod]
     public void SamletDosis_CorrectOverMultipleDays()
     {
         var doser = new Dosis[]
