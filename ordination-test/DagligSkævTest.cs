@@ -3,7 +3,7 @@ namespace ordination_test;
 using shared.Model;
 
 [TestClass]
-public class DagligSkaevTest
+public class DagligSkaevTes
 {
     private Laegemiddel lm;
     private DateTime start;
